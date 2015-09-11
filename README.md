@@ -30,3 +30,5 @@ if __name__ == "__main__":
 ##To Do:
 
 * Add optional flag to only mutate if new fitness is greater than old?
+* Set up as pip-installable package?
+* GitHub release?
