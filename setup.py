@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
   name = "genalg",
-  version = "1.0.0",
+  version = "1.0.1",
   author = "Joey L. Maalouf",
   author_email = "joeylmaalouf@gmail.com",
   description = "A generalizable genetic algorithm package written in Python.",

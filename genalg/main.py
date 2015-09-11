@@ -1,4 +1,4 @@
-from random import choice, randrange
+import random
 
 
 class Population(object):
@@ -82,12 +82,12 @@ class Individual(object):
 
   def scramble(self):
     # scramble(): fully randomize the individual
-    self.chromosomes = [choice(self.possibilities) for _ in range(self.length)]
+    self.chromosomes = [random.choice(self.possibilities) for _ in range(self.length)]
     return self
 
   def mutate(self):
     # mutate(): randomly select a chromosome and mutate it into a new one
-    self.chromosomes[randrange(self.length)] = choice(self.possibilities)
+    self.chromosomes[random.randrange(self.length)] = random.choice(self.possibilities)
     return self
 
   def __str__(self):

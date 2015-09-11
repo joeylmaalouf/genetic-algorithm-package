@@ -1,7 +1,5 @@
 from difflib import SequenceMatcher
 import string
-import sys
-sys.path.append("..")
 import genalg
 
 
