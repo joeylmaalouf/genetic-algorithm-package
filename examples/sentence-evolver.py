@@ -23,6 +23,6 @@ def levenshtein_distance(s1, s2):
 
 
 if __name__ == "__main__":
-  target_string = "We're evolving!"
-  p = genalg.Population(popsize = 1000, nchrom = len(target_string), chromset = string.ascii_letters + string.punctuation)
+  target_string = "Evolution is cool"
+  p = genalg.Population(popsize = 1000, nchrom = len(target_string), chromset = string.ascii_letters)
   best = p.run(eval_fn = lambda x: levenshtein_distance(x, target_string), fitness_goal = 0, generations = float("Inf"), minimize = True, verbose = True)
