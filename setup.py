@@ -1,13 +1,14 @@
 from setuptools import setup
+from genalg import __name__, __version__, __author__, __author_email__, __description__, __long_description__, __url__
 
 setup(
-  name = "genalg",
-  version = "1.0.1",
-  author = "Joey L. Maalouf",
-  author_email = "joeylmaalouf@gmail.com",
-  description = "A generalizable genetic algorithm package written in Python.",
-  long_description = "GenAlg is a generalizable genetic algorithm package written in Python. It was created for the purpose of providing developers with a simple yet powerful solution approximation technique that, given enough time, can also find exact answers.",
-  url = "https://github.com/joeylmaalouf/genetic-algorithm-package",
+  name = __name__,
+  version = __version__,
+  author = __author__,
+  author_email = __author_email__,
+  description = __description__,
+  long_description = __long_description__,
+  url = __url__,
   license = "MIT",
   classifiers = [
     "Development Status :: 4 - Beta",
@@ -17,5 +18,5 @@ setup(
     "Programming Language :: Python :: 2.7",
   ],
   keywords = "genetic algorithm optimization solution approximation machine learning",
-  packages = ["genalg"]
+  packages = [__name__]
 )
