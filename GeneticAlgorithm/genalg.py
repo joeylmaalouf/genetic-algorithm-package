@@ -13,14 +13,19 @@ class Population(object):
     self.size = popsize
     self.members = [Individual(nchrom, chromset) for _ in range(self.size)]
 
-  def run(self, eval_fn, fitness_threshold = float("Inf"), generations = 10000, verbose = False, mutate_cutoff = 1/3.0, scramble_cutoff = 2/3.0):
+  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
     # run(): step the population forward through generations until it
     #        finds an optimal solution or the generation cap is reached
     # eval_fn: the function that takes in a list of chromosomes and returns a fitness
+    # fitness_goal: the cutoff value at which to stop
     # generations: the maximum generation limit at which to return the best individual
-    # verbose: boolean flag to print each generation's best individual
+    # minimize: boolean flag to minimize fitness instead of maximize
     # mutate_cutoff: the ratio of the population at which to start mutating
     # scramble_cutoff: the ratio of the population at which to start scrambling
+    # verbose: boolean flag to print each generation's best individual
+    if fitness_goal == float("Inf") and generations == float("Inf"):
+      raise ValueError("Either the fitness goal or the generation cap must not be set to infinity, or else the algorithm will evolve indefinitely.")
+
     current_generation = 0
     while current_generation < generations:
       current_generation += 1
@@ -29,10 +34,11 @@ class Population(object):
         # evaluate each individual
         individual.fitness = eval_fn(individual.chromosomes)
 
-        if individual.fitness >= fitness_threshold:
+        condition = (individual.fitness >= fitness_goal) if not minimize else (individual.fitness <= fitness_goal)
+        if condition:
           if verbose:
-            print("Generation {0}, found fit enough individual: {1} with fitness {2} (>= {3})".format(
-              current_generation, individual, individual.fitness, fitness_threshold))
+            print("Generation {0}, found fit enough individual: {1} with fitness {2} ({3}= {4})".format(
+              current_generation, individual, individual.fitness, ">" if not minimize else "<", fitness_goal))
           # return an individual if it surpasses the threshold
           return individual
 
@@ -47,7 +53,7 @@ class Population(object):
         individual.scramble()
 
       # sort the population by fitness
-      self.members.sort(key = lambda i: i.fitness, reverse = True)
+      self.members.sort(key = lambda i: i.fitness, reverse = not minimize)
       if verbose:
         print("Generation {0}, best individual: {1} with fitness {2}".format(current_generation, self.members[0], self.members[0].fitness))
 
@@ -88,18 +94,15 @@ class Individual(object):
 
 
 if __name__ == "__main__":
-  # define an example problem:
+  # define an example problem
   population_size = 1000
   num_chromosomes = 15
   possible_values = range(20)
-  fitness_threshold = 16.0
+  fitness_goal = 16.0
   max_generations = 2000
   def evaluation_function(chromosomes):
     return float(sum(chromosomes)) / len(chromosomes)
 
   # create and run the population
   p = Population(population_size, num_chromosomes, possible_values)
-  best = p.run(evaluation_function, fitness_threshold, max_generations, verbose = True)
-
-# todo: add optional flag to only mutate if new fitness is greater than old?
-# todo: add optional flag to minimize fitness (cost) rather than maximize?
+  best = p.run(evaluation_function, fitness_goal, max_generations, verbose = True)
