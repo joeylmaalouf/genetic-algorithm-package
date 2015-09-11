@@ -58,6 +58,8 @@ class Population(object):
         print("Generation {0}, best individual: {1} with fitness {2}".format(current_generation, self.members[0], self.members[0].fitness))
 
     # generation limit reached, return the best member thus far
+    if verbose:
+      print("Generation limit reached ({0}), best individual: {1} with fitness {2}".format(generations, self.members[0], self.members[0].fitness))
     return self.members[0]
 
   def __str__(self):

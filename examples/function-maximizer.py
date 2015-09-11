@@ -5,7 +5,7 @@ from GeneticAlgorithm import genalg
 
 def func_to_optimize(inputs):
   x, y, z = inputs
-  return x ** y / z
+  return x ** y / float(z)
 
 
 if __name__ == "__main__":
