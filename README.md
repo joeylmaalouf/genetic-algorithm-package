@@ -4,7 +4,7 @@ Contains a generalizable genetic algorithm written in Python.
 
 
 ##Genetic Algorithm
-#####(`GeneticAlgorithm/genalg.py`)
+#####(`genalg/main.py`)
 
 class `Population`: Given problem specifications, create and run through a population of possible individual solutions until either the fitness goal or the generation limit is reached.
 
@@ -15,7 +15,7 @@ class `Individual`: Given problem specifications, randomly create a possible sol
 #####(`examples/function-minimizer.py`)
 
 ```python
-from GeneticAlgorithm import genalg
+import genalg
 
 def func_to_optimize(inputs):
   x, y, z = inputs
