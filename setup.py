@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-  name = "GenAlg",
+  name = "genalg",
   version = "1.0.0",
   author = "Joey L. Maalouf",
   author_email = "joeylmaalouf@gmail.com",
