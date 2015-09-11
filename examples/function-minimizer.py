@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from GeneticAlgorithm import genalg
+import genalg
 
 
 def func_to_optimize(inputs):

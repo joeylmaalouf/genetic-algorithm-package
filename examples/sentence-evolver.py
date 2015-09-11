@@ -2,7 +2,7 @@ from difflib import SequenceMatcher
 import string
 import sys
 sys.path.append("..")
-from GeneticAlgorithm import genalg
+import genalg
 
 
 def string_similarity(a, b):
