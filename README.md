@@ -3,9 +3,10 @@
 Contains a generalizable genetic algorithm written in Python.
 
 
-##Example Usage
+##Installation
+#####([GenAlg on PyPI](https://pypi.python.org/pypi/genalg/))
 
-Installation: `sudo pip2 install genalg`
+`sudo pip2 install genalg`
 
 
 ##Genetic Algorithm
@@ -36,4 +37,4 @@ if __name__ == "__main__":
 ##To Do:
 
 * Add optional flag to only mutate if new fitness is greater than old?
-* GitHub release?
+* Add some sort of configuration dict to set instead of having a dozen parameters to run()?
