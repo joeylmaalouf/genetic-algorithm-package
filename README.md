@@ -37,4 +37,5 @@ if __name__ == "__main__":
 ##To Do:
 
 * Add optional flag to only mutate if new fitness is greater than old?
-* Add some sort of configuration dict to set instead of having a dozen parameters to run()?
+* Add some sort of configuration dict to set instead of having so many parameters to run()?
+* Add transformations other than mutation, like swap or crossover?
