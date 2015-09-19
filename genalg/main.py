@@ -13,13 +13,14 @@ class Population(object):
     self.size = popsize
     self.members = [Individual(nchrom, chromset) for _ in range(self.size)]
 
-  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
+  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, include_swap = False, mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
     # run(): step the population forward through generations until it
     #        finds an optimal solution or the generation cap is reached
     # eval_fn: the function that takes in a list of chromosomes and returns a fitness
     # fitness_goal: the cutoff value at which to stop
     # generations: the maximum generation limit at which to return the best individual
     # minimize: boolean flag to minimize fitness instead of maximize
+    # include_swap: boolean flag to add chromosome swap as a randomly selected alternative to standard mutation
     # mutate_cutoff: the ratio of the population at which to start mutating
     # scramble_cutoff: the ratio of the population at which to start scrambling
     # verbose: boolean flag to print each generation's best individual
@@ -48,7 +49,7 @@ class Population(object):
       mid = slice(int(self.size * mutate_cutoff), int(self.size * scramble_cutoff))
       bot = slice(int(self.size * scramble_cutoff), None)
       for individual in self.members[mid]:
-        individual.mutate()
+        individual.mutate(include_swap)
       for individual in self.members[bot]:
         individual.scramble()
 
@@ -85,9 +86,13 @@ class Individual(object):
     self.chromosomes = [random.choice(self.possibilities) for _ in range(self.length)]
     return self
 
-  def mutate(self):
-    # mutate(): randomly select a chromosome and mutate it into a new one
-    self.chromosomes[random.randrange(self.length)] = random.choice(self.possibilities)
+  def mutate(self, include_swap):
+    # mutate(): mutate a random chromosome into a new one, or swap the positions of two chromosomes
+    if include_swap and random.random() >= 0.5:
+    	i, j = random.randrange(self.length), random.randrange(self.length)
+    	self.chromosomes[i], self.chromosomes[j] = self.chromosomes[j], self.chromosomes[i]
+    else:
+    	self.chromosomes[random.randrange(self.length)] = random.choice(self.possibilities)
     return self
 
   def __str__(self):

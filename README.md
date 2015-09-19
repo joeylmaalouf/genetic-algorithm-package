@@ -28,14 +28,21 @@ def func_to_optimize(inputs):
   return x * y / float(z)
 
 if __name__ == "__main__":
-  p = genalg.Population(popsize = 200, nchrom = 3, chromset = range(1, 20))
-  best = p.run(eval_fn = func_to_optimize, fitness_goal = -float("Inf"), generations = 300, minimize = True)
+  p = genalg.Population(
+    popsize = 200,
+    nchrom = 3,
+    chromset = range(1, 20)
+  )
+  best = p.run(
+    eval_fn = func_to_optimize,
+    fitness_goal = -float("Inf"),
+    generations = 300,
+    minimize = True
+  )
   print(best)
 ```
 
 
 ##To Do:
 
-* Add optional flag to only mutate if new fitness is greater than old?
-* Add some sort of configuration dict to set instead of having so many parameters to run()?
-* Add transformations other than mutation, like swap or crossover?
+* Add crossover and release as v1.0.3
