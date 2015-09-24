@@ -18,6 +18,6 @@ if __name__ == "__main__":
     eval_fn = lambda x: string_similarity(x, target_string),
     fitness_goal = 1.0,
     generations = float("Inf"),
-    include_swap = True,
+    mutations = ["mutate", "swap"],
     verbose = True
   )

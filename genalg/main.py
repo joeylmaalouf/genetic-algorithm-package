@@ -1,6 +1,37 @@
 import random
 
 
+def scramble(population):
+  # scramble(): scrambles every individual in a population
+  for individual in population:
+    individual.chromosomes = [random.choice(individual.possibilities) for _ in range(individual.length)]
+  return population
+
+
+def mutate(population):
+  # mutate(): mutates every individual in a population
+  for individual in population:
+    individual.chromosomes[random.randrange(individual.length)] = random.choice(individual.possibilities)
+  return population
+
+
+def swap(population):
+  # swap(): does a random swap in every individual in a population
+  for individual in population:
+    i, j = random.randrange(individual.length), random.randrange(individual.length)
+    individual.chromosomes[i], individual.chromosomes[j] = individual.chromosomes[j], individual.chromosomes[i]
+  return population
+
+
+def crossover(population):
+  # crossover(): performs crossover between every two individuals in a population
+  half = len(population) / 2
+  for individual1, individual2 in zip(population[:half], population[half:]):
+    cross_section = slice(random.randrange(0, individual1.length / 2), random.randrange(individual1.length / 2, individual1.length))
+    individual1.chromosomes[cross_section], individual2.chromosomes[cross_section] = individual2.chromosomes[cross_section], individual1.chromosomes[cross_section]
+  return population
+
+
 class Population(object):
   # Population(): a group of individuals
 
@@ -13,18 +44,18 @@ class Population(object):
     self.size = popsize
     self.members = [Individual(nchrom, chromset) for _ in range(self.size)]
 
-  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, include_swap = False, mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
+  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, mutations = ["mutate"], mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
     # run(): step the population forward through generations until it
     #        finds an optimal solution or the generation cap is reached
     # eval_fn: the function that takes in a list of chromosomes and returns a fitness
     # fitness_goal: the cutoff value at which to stop
     # generations: the maximum generation limit at which to return the best individual
     # minimize: boolean flag to minimize fitness instead of maximize
-    # include_swap: boolean flag to add chromosome swap as a randomly selected alternative to standard mutation
+    # mutations: the mutation method to use, a list that must contain one or more of "mutate", "swap", or "crossover"
     # mutate_cutoff: the ratio of the population at which to start mutating
     # scramble_cutoff: the ratio of the population at which to start scrambling
     # verbose: boolean flag to print each generation's best individual
-    if fitness_goal == float("Inf") and generations == float("Inf"):
+    if abs(fitness_goal) == float("Inf") and abs(generations) == float("Inf"):
       raise ValueError("Either the fitness goal or the generation cap must not be set to infinity, or else the algorithm will evolve indefinitely.")
 
     current_generation = 0
@@ -44,14 +75,20 @@ class Population(object):
           return individual
 
       # leave the top segment alone
+      pass
+
       # mutate the middle segment
+      mid = slice(int(self.size * mutate_cutoff), int(self.size * scramble_cutoff))      
+      if "mutate" in mutations:
+        self.members[mid] = mutate(self.members[mid])
+      if "swap" in mutations:
+        self.members[mid] = swap(self.members[mid])
+      if "crossover" in mutations:
+        self.members[mid] = crossover(self.members[mid])
+
       # scramble the bottom segment
-      mid = slice(int(self.size * mutate_cutoff), int(self.size * scramble_cutoff))
       bot = slice(int(self.size * scramble_cutoff), None)
-      for individual in self.members[mid]:
-        individual.mutate(include_swap)
-      for individual in self.members[bot]:
-        individual.scramble()
+      self.members[bot] = scramble(self.members[bot])
 
       # sort the population by fitness
       self.members.sort(key = lambda i: i.fitness, reverse = not minimize)
@@ -78,22 +115,7 @@ class Individual(object):
     self.fitness = None
     self.length = nchrom
     self.possibilities = chromset
-    self.chromosomes = []
-    self.scramble() # randomly initialize the starting chromosomes
-
-  def scramble(self):
-    # scramble(): fully randomize the individual
     self.chromosomes = [random.choice(self.possibilities) for _ in range(self.length)]
-    return self
-
-  def mutate(self, include_swap):
-    # mutate(): mutate a random chromosome into a new one, or swap the positions of two chromosomes
-    if include_swap and random.random() >= 0.5:
-    	i, j = random.randrange(self.length), random.randrange(self.length)
-    	self.chromosomes[i], self.chromosomes[j] = self.chromosomes[j], self.chromosomes[i]
-    else:
-    	self.chromosomes[random.randrange(self.length)] = random.choice(self.possibilities)
-    return self
 
   def __str__(self):
     # __str__(): return a string representation of the individual

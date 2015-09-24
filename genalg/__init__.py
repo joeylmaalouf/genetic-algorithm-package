@@ -1,6 +1,6 @@
 from main import *
 __name__ = "genalg"
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __author__ = "Joey L. Maalouf"
 __author_email__ = "joeylmaalouf@gmail.com"
 __description__ = "A generalizable genetic algorithm package written in Python."

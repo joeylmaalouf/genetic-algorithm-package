@@ -15,8 +15,7 @@ setup(
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 2.7",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+    "Programming Language :: Python :: 2.7"
   ],
   keywords = "genetic algorithm optimization solution approximation machine learning",
   packages = [__name__]
