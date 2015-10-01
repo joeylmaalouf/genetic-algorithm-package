@@ -18,14 +18,16 @@ class `Individual`: Given problem specifications, randomly create a possible sol
 
 
 ##Example Usage
-#####(`examples/function-minimizer.py`)
+#####(`examples/function-maximizer.py`)
 
 ```python
 import genalg
 
+
 def func_to_optimize(inputs):
   x, y, z = inputs
   return x * y / float(z)
+
 
 if __name__ == "__main__":
   p = genalg.Population(
@@ -35,9 +37,8 @@ if __name__ == "__main__":
   )
   best = p.run(
     eval_fn = func_to_optimize,
-    fitness_goal = -float("Inf"),
-    generations = 300,
-    minimize = True
+    fitness_goal = float("Inf"),
+    generations = 400
   )
   print(best)
 ```
