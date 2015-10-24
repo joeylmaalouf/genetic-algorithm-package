@@ -31,14 +31,14 @@ def func_to_optimize(inputs):
 
 if __name__ == "__main__":
   p = genalg.Population(
-    popsize = 200,
-    nchrom = 3,
-    chromset = range(1, 20)
+    popsize = 200,                # number of individuals in the population
+    nchrom = 3,                   # number of chromosomes per individual
+    chromset = range(1, 20)       # set from which to pick chromosomes
   )
   best = p.run(
-    eval_fn = func_to_optimize,
-    fitness_goal = float("Inf"),
-    generations = 400
+    eval_fn = func_to_optimize,   # function to optimize
+    fitness_goal = float("Inf"),  # maximum fitness to optimize towards
+    generations = 400             # maximum generations to run for
   )
   print(best)
 ```
