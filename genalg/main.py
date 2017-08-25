@@ -66,7 +66,7 @@ class Population(object):
     self.size = popsize
     self.members = [Individual(nchrom, chromset) for _ in range(self.size)]
 
-  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, mutations = ["mutate"], mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False):
+  def run(self, eval_fn, fitness_goal = float("Inf"), generations = 10000, minimize = False, mutations = ["mutate"], mutate_cutoff = 1 / 3.0, scramble_cutoff = 2 / 3.0, verbose = False, print_report = None):
     # run(): step the population forward through generations until it
     #        finds an optimal solution or the generation cap is reached
     # eval_fn: the function that takes in a list of chromosomes and returns a fitness
@@ -80,6 +80,9 @@ class Population(object):
     if abs(fitness_goal) == float("Inf") and abs(generations) == float("Inf"):
       raise ValueError("Either the fitness goal or the generation cap must not be set to infinity, or else the algorithm will evolve indefinitely.")
 
+    if print_report is None:
+      def print_report(name, ind):
+        print('   {0} {1} with fitness {2}'.format(name, ind.chromosomes, ind.fitness))
     current_generation = 0
     while current_generation < generations:
       current_generation += 1
@@ -136,7 +139,10 @@ class Population(object):
       self.members.sort(key = lambda i: i.fitness, reverse = not minimize)
 
       if verbose:
-        print("Generation {0}, best individual: {1} with fitness {2}".format(current_generation, self.members[0], self.members[0].fitness))
+        print("Generation {0}".format(current_generation))
+        print_report("best", self.members[0])
+        print_report("mid", self.members[int(self.size/2)])
+        print_report("bad", self.members[-1])
 
     # generation limit reached, return the best member thus far
     if verbose:
