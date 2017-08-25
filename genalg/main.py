@@ -7,6 +7,28 @@ def scramble(population):
     individual.chromosomes = [random.choice(individual.possibilities) for _ in range(individual.length)]
   return population
 
+def mate(parents, children):
+  # mate(): mates parents to create children
+  num_parents = len(parents)
+  num_chrom = parents[0].length
+  for i in range(len(children)):
+    mom = random.randrange(0, num_parents)
+    dad = random.randrange(0, num_parents)
+    for c in range(num_chrom):
+      children[i].chromosomes[c] = parents[random.choice([mom,dad])].chromosomes[c]
+  return children
+
+def shufflemate(parents, children):
+  # mate(): mates parents to create children
+  num_parents = len(parents)
+  num_chrom = parents[0].length
+  for i in range(len(children)):
+    mom = random.randrange(0, num_parents)
+    dad = random.randrange(0, num_parents)
+    mom_genes = random.randrange(1, num_chrom-1)
+    dad_genes = num_chrom - mom_genes
+    children[i].chromosomes = random.sample(parents[mom].chromosomes, mom_genes) + random.sample(parents[dad].chromosomes, dad_genes)
+  return children
 
 def mutate(population):
   # mutate(): mutates every individual in a population
@@ -62,6 +84,42 @@ class Population(object):
     while current_generation < generations:
       current_generation += 1
 
+      # leave the top segment alone
+      pass
+
+      # mutate the middle segment
+      mid = slice(int(self.size * mutate_cutoff), int(self.size * scramble_cutoff))
+      if "mutate" in mutations:
+        self.members[mid] = mutate(self.members[mid])
+      if "swap" in mutations:
+        self.members[mid] = swap(self.members[mid])
+      if "crossover" in mutations:
+        self.members[mid] = crossover(self.members[mid])
+
+      # scramble the bottom segment
+      bot = slice(int(self.size * scramble_cutoff), None)
+      if 'mate' in mutations:
+        # Parents are in the top and mid sections
+        topmid = slice(0, int(self.size * scramble_cutoff))
+        self.members[bot] = mate(self.members[topmid], self.members[bot])
+      elif 'shuffle-mate' in mutations:
+        topmid = slice(0, int(self.size * scramble_cutoff))
+        self.members[bot] = shufflemate(self.members[topmid], self.members[bot])
+      else:
+        self.members[bot] = scramble(self.members[bot])
+      if 'mutate-children' in mutations:
+        self.members[bot] = mutate(self.members[bot])
+
+      if 'sort' in mutations:
+        for i in range(self.size):
+          self.members[i].chromosomes.sort()
+
+      # get rid of duplicate entries
+      self.members = list(set(self.members))
+      if len(self.members) < self.size:
+        self.members += [Individual(nchrom, chromset)
+                         for _ in range(self.size-len(self.members))]
+
       for individual in self.members:
         # evaluate each individual
         individual.fitness = eval_fn(individual.chromosomes)
@@ -74,24 +132,9 @@ class Population(object):
           # return an individual if it surpasses the threshold
           return individual
 
-      # leave the top segment alone
-      pass
-
-      # mutate the middle segment
-      mid = slice(int(self.size * mutate_cutoff), int(self.size * scramble_cutoff))      
-      if "mutate" in mutations:
-        self.members[mid] = mutate(self.members[mid])
-      if "swap" in mutations:
-        self.members[mid] = swap(self.members[mid])
-      if "crossover" in mutations:
-        self.members[mid] = crossover(self.members[mid])
-
-      # scramble the bottom segment
-      bot = slice(int(self.size * scramble_cutoff), None)
-      self.members[bot] = scramble(self.members[bot])
-
       # sort the population by fitness
       self.members.sort(key = lambda i: i.fitness, reverse = not minimize)
+
       if verbose:
         print("Generation {0}, best individual: {1} with fitness {2}".format(current_generation, self.members[0], self.members[0].fitness))
 
