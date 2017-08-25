@@ -113,14 +113,21 @@ class Population(object):
       if 'mutate-children' in mutations:
         self.members[bot] = mutate(self.members[bot])
 
+      nchrom = self.members[0].length
+      possibilities = self.members[0].possibilities
       if 'sort' in mutations:
         for i in range(self.size):
+          # eliminate duplicate chromosomes, since "sort" implies we
+          # are looking at sets.
+          self.members[i].chromosomes = list(set(self.members[i].chromosomes))
+          while len(self.members[i].chromosomes) < nchrom:
+            self.members[i].chromosomes.append(random.choice(possibilities))
           self.members[i].chromosomes.sort()
 
       # get rid of duplicate entries
       self.members = list(set(self.members))
       if len(self.members) < self.size:
-        self.members += [Individual(nchrom, chromset)
+        self.members += [Individual(nchrom, possibilities)
                          for _ in range(self.size-len(self.members))]
 
       for individual in self.members:
