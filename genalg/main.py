@@ -148,8 +148,12 @@ class Population(object):
       if verbose:
         print("Generation {0}".format(current_generation))
         print_report("best", self.members[0])
-        print_report("mid", self.members[int(self.size/2)])
-        print_report("bad", self.members[-1])
+        if verbose > 2:
+          print_report("2nd", self.members[1])
+          print_report("keep", self.members[int(self.size/3)])
+        if verbose > 1:
+          print_report("mid", self.members[int(self.size/2)])
+          print_report("bad", self.members[-1])
 
     # generation limit reached, return the best member thus far
     if verbose:
@@ -178,6 +182,8 @@ class Individual(object):
     return str(self.chromosomes)
   def __hash__(self):
     return hash(tuple(self.chromosomes))
+  def __cmp__(self,other):
+    return cmp(tuple(self.chromosomes), tuple(other.chromosomes))
 
 if __name__ == "__main__":
   # define an example problem
