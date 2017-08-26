@@ -176,7 +176,8 @@ class Individual(object):
   def __str__(self):
     # __str__(): return a string representation of the individual
     return str(self.chromosomes)
-
+  def __hash__(self):
+    return hash(tuple(self.chromosomes))
 
 if __name__ == "__main__":
   # define an example problem
