@@ -150,6 +150,10 @@ class Population(object):
         print_report("best", self.members[0])
         if verbose > 2:
           print_report("2nd", self.members[1])
+          jj = 2
+          while self.members[jj].fitness == self.members[0].fitness:
+            print_report("{}rd".format(jj+1), self.members[jj])
+            jj += 1
           print_report("keep", self.members[int(self.size/3)])
         if verbose > 1:
           print_report("mid", self.members[int(self.size/2)])
