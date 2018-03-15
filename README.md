@@ -4,7 +4,7 @@ Contains a generalizable genetic algorithm written in Python.
 
 
 ## Installation
-##### ([GenAlg on PyPI](https://pypi.python.org/pypi/genalg/))
+##### ([GenAlg on PyPI](https://pypi.python.org/pypi/genalg))
 
 `sudo pip2 install genalg`
 
@@ -44,6 +44,6 @@ if __name__ == "__main__":
 ```
 
 
-## To Do:
+## Credits
 
-* ????
+* [@droundy](https://github.com/droundy) - mating options, misc. tweaks
